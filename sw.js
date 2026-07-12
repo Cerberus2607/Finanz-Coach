@@ -1,5 +1,5 @@
-// Service Worker: App-Shell cachen → funktioniert offline
-const CACHE = "finanz-dashboard-v1";
+// Service Worker v7 — network-first für die App-Seite (Updates sofort), Cache als Offline-Fallback
+const CACHE = "finanz-dashboard-v7";
 const ASSETS = [
   "./index.html",
   "./manifest.json",
@@ -21,11 +21,24 @@ self.addEventListener("activate", e => {
 });
 
 self.addEventListener("fetch", e => {
-  // Krypto-Kurse immer frisch versuchen, sonst Cache-first
-  if (e.request.url.includes("api.coingecko.com")) {
+  const url = e.request.url;
+  // Krypto-Kurse: immer live, kein Cache
+  if (url.includes("api.coingecko.com")) {
     e.respondWith(fetch(e.request).catch(() => new Response("{}", {headers:{"Content-Type":"application/json"}})));
     return;
   }
+  // HTML/Navigation: NETWORK-FIRST → Updates erscheinen sofort, Cache nur offline
+  if (e.request.mode === "navigate" || url.endsWith(".html") || url.endsWith("/")) {
+    e.respondWith(
+      fetch(e.request).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+        return res;
+      }).catch(() => caches.match(e.request).then(hit => hit || caches.match("./index.html")))
+    );
+    return;
+  }
+  // Assets (Icons, Chart.js): cache-first, das ändert sich selten
   e.respondWith(
     caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
       if (res.ok && e.request.method === "GET") {

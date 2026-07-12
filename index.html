@@ -16,24 +16,41 @@
 :root{
   --bg:#0f1420; --panel:#181f2e; --panel2:#1f2839; --border:#2a3550;
   --text:#e8ecf4; --muted:#8b96ad; --accent:#4f8cff; --green:#3ecf8e;
-  --red:#ff6b6b; --yellow:#ffc94d; --radius:14px;
+  --red:#ff6b6b; --yellow:#ffc94d; --radius:16px;
+  --grid:rgba(42,53,80,.4); --shadow:0 6px 24px rgba(0,0,0,.25);
+}
+body.light{
+  --bg:#edf0f7; --panel:#ffffff; --panel2:#f2f4fa; --border:#dde3f0;
+  --text:#19213a; --muted:#66718c; --grid:rgba(25,33,58,.08);
+  --shadow:0 6px 20px rgba(25,33,58,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text);min-height:100vh;
+  background:var(--bg);
+  background-image:radial-gradient(900px 500px at 85% -10%, rgba(79,140,255,.14), transparent 60%),
+                   radial-gradient(700px 400px at -10% 100%, rgba(62,207,142,.08), transparent 55%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s,color .25s}
+::selection{background:rgba(79,140,255,.35)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
 .container{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
 header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-h1{font-size:1.5rem;font-weight:700}
-h1 span{color:var(--accent)}
+h1{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+h1 span{background:linear-gradient(90deg,var(--accent),#7ab0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .header-actions{display:flex;gap:8px;flex-wrap:wrap}
 nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;background:var(--panel);padding:6px;border-radius:var(--radius);border:1px solid var(--border)}
 nav button{flex:1;min-width:110px;background:transparent;border:none;color:var(--muted);padding:10px 14px;border-radius:10px;cursor:pointer;font-size:.92rem;font-weight:600;transition:.15s}
-nav button.active{background:var(--accent);color:#fff}
+nav button.active{background:linear-gradient(135deg,var(--accent),#3a6fd8);color:#fff;box-shadow:0 3px 10px rgba(79,140,255,.35)}
 nav button:hover:not(.active){background:var(--panel2);color:var(--text)}
 .tab{display:none}
 .tab.active{display:block}
 .grid{display:grid;gap:16px}
 .kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card{background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel) 92%,var(--bg)));border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--border))}
 .card h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;font-weight:600}
 .kpi-value{font-size:1.6rem;font-weight:700}
 .kpi-sub{font-size:.8rem;color:var(--muted);margin-top:4px}
@@ -44,7 +61,8 @@ nav button:hover:not(.active){background:var(--panel2);color:var(--text)}
 select,input,button.btn{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:9px;font-size:.9rem}
 button.btn{cursor:pointer;font-weight:600;transition:.15s}
 button.btn:hover{border-color:var(--accent)}
-button.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.btn.primary{background:linear-gradient(135deg,var(--accent),#3a6fd8);border-color:transparent;color:#fff;box-shadow:0 3px 10px rgba(79,140,255,.3)}
+button.btn.primary:hover{filter:brightness(1.1)}
 button.btn.danger{color:var(--red)}
 table{width:100%;border-collapse:collapse;font-size:.88rem}
 th{text-align:left;color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;padding:10px 8px;border-bottom:1px solid var(--border)}
@@ -55,7 +73,7 @@ tr:hover td{background:rgba(79,140,255,.05)}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .toolbar .spacer{flex:1}
 .progress{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:8px}
-.progress>div{height:100%;border-radius:6px;background:var(--green);transition:width .3s}
+.progress>div{height:100%;border-radius:6px;background:linear-gradient(90deg,#2fae76,var(--green));transition:width .5s cubic-bezier(.4,0,.2,1)}
 .progress>div.over{background:var(--red)}
 .progress>div.close{background:var(--yellow)}
 .budget-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(42,53,80,.5)}
@@ -108,6 +126,7 @@ small.muted{color:var(--muted)}
 <header>
   <h1>💶 Finanz<span>Dashboard</span></h1>
   <div class="header-actions">
+    <button class="btn" id="themeBtn" onclick="toggleTheme()" title="Hell/Dunkel umschalten">☀️</button>
     <button class="btn" onclick="openTxModal()">+ Transaktion</button>
     <button class="btn" onclick="exportJSON()">Backup ↓</button>
     <button class="btn" onclick="document.getElementById('jsonFile').click()">Backup ↑</button>
@@ -116,14 +135,14 @@ small.muted{color:var(--muted)}
 </header>
 
 <nav id="nav">
-  <button data-tab="uebersicht" class="active">Übersicht</button>
+  <button data-tab="uebersicht" class="active">📊 Übersicht</button>
   <button data-tab="coach">🧭 Coach</button>
-  <button data-tab="transaktionen">Transaktionen</button>
-  <button data-tab="budgets">Budgets</button>
-  <button data-tab="fixkosten">Fixkosten</button>
-  <button data-tab="sparziele">Sparziele</button>
-  <button data-tab="krypto">Krypto</button>
-  <button data-tab="import">CSV-Import</button>
+  <button data-tab="transaktionen">📒 Transaktionen</button>
+  <button data-tab="budgets">🎯 Budgets</button>
+  <button data-tab="fixkosten">📌 Fixkosten</button>
+  <button data-tab="sparziele">🐷 Sparziele</button>
+  <button data-tab="krypto">🪙 Krypto</button>
+  <button data-tab="import">⬆️ Import</button>
 </nav>
 
 <!-- ÜBERSICHT -->
@@ -152,6 +171,10 @@ small.muted{color:var(--muted)}
         <button class="btn" style="font-size:.8rem;padding:5px 10px" onclick="setSaldo()">Setzen</button>
       </div>
     </div>
+    <div class="card"><h3><span class="dot n" id="dotWealth"></span>Netto-Vermögen</h3>
+      <div class="kpi-value" id="kpiWealth">–</div>
+      <div class="kpi-sub" id="kpiWealthSub">Konto + Krypto − Restschulden</div>
+    </div>
   </div>
   <div class="grid charts">
     <div class="card"><h3>Einnahmen vs. Ausgaben (6 Monate)</h3><div class="chart-box"><canvas id="chartTrend"></canvas></div></div>
@@ -179,7 +202,10 @@ small.muted{color:var(--muted)}
       <p class="hint" style="margin-top:8px">Richtwert: max. 50 % Grundbedarf (Wohnen, Lebensmittel, Transport, Versicherung, Gesundheit), max. 30 % Wünsche, min. 20 % Sparen.</p>
     </div>
   </div>
-  <div class="section-title">Empfehlungen — nach Hebel sortiert</div>
+  <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <span>Empfehlungen — nach Hebel sortiert</span>
+    <button class="btn" onclick="exportForClaude()" title="Kompakte Kennzahlen + Analyse-Auftrag kopieren und in der Claude-App einfügen">🤖 Analyse-Paket für Claude kopieren</button>
+  </div>
   <div id="coachFindings"></div>
   <p class="hint" style="margin-top:16px">Der Coach arbeitet regelbasiert mit deinen lokalen Daten — keine Anlage- oder Steuerberatung. Für eine individuelle Analyse: Backup ↓ exportieren und die JSON-Datei in einen Claude-Chat hochladen.</p>
 </div>
@@ -358,7 +384,7 @@ small.muted{color:var(--muted)}
 /* ============================================================
    PURE LOGIC (parsen, kategorisieren, erkennen) — testbar
    ============================================================ */
-const CATEGORIES = ["Wohnen","Lebensmittel","Restaurants & Café","Transport","Abos & Verträge","Versicherungen","Shopping","Gesundheit","Freizeit & Reisen","Bildung","Kredite & Raten","Familie & Unterhalt","Haustiere","Wetten & Glücksspiel","Einkommen","Sparen & Anlegen","Sonstiges"];
+const CATEGORIES = ["Wohnen","Lebensmittel","Restaurants & Café","Transport","Abos & Verträge","Versicherungen","Shopping","Gesundheit","Freizeit & Reisen","Bildung","Kredite & Raten","Familie & Unterhalt","Haustiere","Wetten & Glücksspiel","Bargeld & Haushalt","Einkommen","Sparen & Anlegen","Sonstiges"];
 
 const CAT_RULES = [
   ["Wohnen", ["miete","kaltmiete","warmmiete","nebenkosten","vermieter","hausverwaltung","wohnung","strom","gas ","stadtwerke","vattenfall","eon","e.on","enbw","rundfunk","gez","wasser"]],
@@ -375,6 +401,7 @@ const CAT_RULES = [
   ["Familie & Unterhalt", ["unterhalt","unterhaltsvorschuss"," ub ","jugendamt","kindesunterhalt","taschengeld","kita","kindergarten","elternbeitrag"]],
   ["Haustiere", ["fressnapf","hundefutter","katzenfutter","tierarzt","zooplus","futterhaus","tierhandlung","hundesteuer","tierheim","hundeschule"]],
   ["Wetten & Glücksspiel", ["tipico","bwin","bet365","betano","oddset","lotto","spielbank","casino","pokerstars","interwetten","bet-at-home","westlotto"]],
+  ["Bargeld & Haushalt", ["bargeldauszahlung","bargeldabhebung","geldautomat","bargeld"," gaa ","ga nr","atm ","auszahlung ga","cash group","cashgroup","abhebung"]],
   ["Einkommen", ["gehalt","lohn","salary","bezüge","bezuege","rente","kindergeld","elterngeld","bafög","bafoeg","steuererstattung","erstattung finanzamt","bonus","dividende","zinsgutschrift","zinsen"]],
   ["Sparen & Anlegen", ["depot","etf","sparplan","trade republic","scalable","comdirect depot","flatex","ing diba depot","tagesgeld","festgeld","dauerauftrag spar"]]
 ];
@@ -684,6 +711,8 @@ function coachAnalysis(transactions, budgets, goals, cryptoVal, recurring, ms){
 
   const order = {crit:0, warn:1, info:2, ok:3};
   f.sort((a,b)=> order[a.level]-order[b.level] || (b.saving||0)-(a.saving||0));
+  // Stabile IDs zum Ausblenden einzelner Hinweise
+  f.forEach(x=>{ if(!x.id) x.id = x.title.toLowerCase().replace(/[^a-zäöüß]+/g," ").trim().split(" ").slice(0,2).join("-"); });
   return {score: Math.max(0,Math.min(100,Math.round(score))), findings:f, split,
           meta:{avgInc,avgExp,avgBal,fixMonthly,aboSum,totalSaved}};
 }
@@ -706,6 +735,18 @@ const MONTH_NAMES = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt
 const monthLabel = ym => { const [y,m]=ym.split("-"); return MONTH_NAMES[+m-1]+" "+y; };
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
+function cvar(n){ return getComputedStyle(document.body).getPropertyValue(n).trim(); }
+function applyTheme(){
+  const light = (state.settings && state.settings.theme) === "light";
+  document.body.classList.toggle("light", light);
+  const b = document.getElementById("themeBtn");
+  if(b) b.textContent = light ? "🌙" : "☀️";
+}
+function toggleTheme(){
+  state.settings = state.settings || {};
+  state.settings.theme = (state.settings.theme==="light") ? "dark" : "light";
+  save(); applyTheme(); renderAll();
+}
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg; t.style.display="block";
@@ -767,7 +808,7 @@ function avgSavings(n=3){
    RENDER: Übersicht
    ============================================================ */
 let chartTrend=null, chartCat=null, chartForecast=null;
-const CAT_COLORS = ["#4f8cff","#3ecf8e","#ffc94d","#ff6b6b","#b47cff","#4dd6e8","#ff9f5a","#7ee08a","#e878c9","#8b96ad","#5ac8fa","#d4b483","#697a99"];
+const CAT_COLORS = ["#4f8cff","#3ecf8e","#ffc94d","#ff6b6b","#b47cff","#4dd6e8","#ff9f5a","#7ee08a","#e878c9",cvar("--muted"),"#5ac8fa","#d4b483","#697a99"];
 
 function renderMonthSelect(){
   const sel = document.getElementById("monthSelect");
@@ -821,6 +862,25 @@ function renderOverview(){
     setDot("dotSaldo", ref>0 ? (now>=ref*0.5 ? "g" : now>=ref*0.2 ? "y" : "r") : (now>0?"g":"r"));
   } else setDot("dotSaldo","n");
 
+  // Netto-Vermögen: Kontostand + Krypto − Restschulden (Kredit-Tracker)
+  const konto = state.balanceAnchor
+    ? state.balanceAnchor.amount + state.transactions.filter(t=>t.date > state.balanceAnchor.date).reduce((s,t)=>s+t.amount,0)
+    : 0;
+  const kryp = cryptoValue();
+  const debts = Array.isArray(state.loans)
+    ? state.loans.reduce((a,l)=>a + l.rate*monthsRemaining(l.end), 0)
+    : 0;
+  const nettoW = konto + kryp - debts;
+  const wEl = document.getElementById("kpiWealth");
+  wEl.textContent = fmt.format(nettoW);
+  wEl.className = "kpi-value " + (nettoW>=0 ? "pos" : "neg");
+  setDot("dotWealth", nettoW>0 ? "g" : nettoW>-2000 ? "y" : "r");
+  const parts = [];
+  if(state.balanceAnchor) parts.push("Konto "+fmt.format(konto));
+  if(kryp>0) parts.push("Krypto "+fmt.format(kryp));
+  if(debts>0) parts.push("− Schulden "+fmt.format(debts));
+  document.getElementById("kpiWealthSub").textContent = parts.join(" ") || "Kontostand setzen für die Berechnung";
+
   // Trend-Chart: letzte 6 Monate
   const months = allMonths().slice(0,6).reverse();
   const incD = months.map(m=>sums(txOfMonth(m)).inc);
@@ -846,7 +906,7 @@ function renderOverview(){
     data:{ labels: entries.map(e=>e[0]),
       datasets:[{data: entries.map(e=>e[1]), backgroundColor: CAT_COLORS, borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:"right",labels:{color:"#8b96ad",boxWidth:12,font:{size:11}}},
+      plugins:{legend:{position:"right",labels:{color:cvar("--muted"),boxWidth:12,font:{size:11}}},
       tooltip:{callbacks:{label:c=>` ${c.label}: ${fmt.format(c.parsed)}`}}}}
   });
 
@@ -859,10 +919,10 @@ function renderOverview(){
 
 function chartOpts(){
   return {responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{color:"#8b96ad"}},
+    plugins:{legend:{labels:{color:cvar("--muted")}},
       tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt.format(c.parsed.y)}`}}},
-    scales:{x:{ticks:{color:"#8b96ad"},grid:{color:"rgba(42,53,80,.4)"}},
-            y:{ticks:{color:"#8b96ad",callback:v=>fmt.format(v)},grid:{color:"rgba(42,53,80,.4)"}}}};
+    scales:{x:{ticks:{color:cvar("--muted")},grid:{color:cvar("--grid")}},
+            y:{ticks:{color:cvar("--muted"),callback:v=>fmt.format(v)},grid:{color:cvar("--grid")}}}};
 }
 
 function esc(s){ return (s||"").replace(/[<>&"]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c])); }
@@ -1001,7 +1061,7 @@ function renderFixkosten(){
 /* ============================================================
    KREDITE & RATEN TRACKER
    ============================================================ */
-const SEED_LOANS = []; // Kredite bitte selbst im Fixkosten-Tab anlegen
+const SEED_LOANS = [];
 
 function monthsRemaining(endYm){
   const now = new Date();
@@ -1398,6 +1458,11 @@ function renderCrypto(){
    COACH RENDER
    ============================================================ */
 let chart503020 = null;
+function hideFinding(id){
+  state.coachHidden = state.coachHidden || {};
+  state.coachHidden[id] = true;
+  save(); renderCoach();
+}
 function renderCoach(){
   const rec = markApproved(detectRecurring(state.transactions)).filter(r=>r.active);
   const {score, findings, split} = coachAnalysis(state.transactions, state.budgets, state.goals, cryptoValue(), rec, monthStart());
@@ -1409,15 +1474,21 @@ function renderCoach(){
     sEl.style.color = score>=75 ? "var(--green)" : score>=50 ? "var(--yellow)" : "var(--red)";
     lEl.textContent = score>=75 ? "Solide aufgestellt" : score>=50 ? "Okay — mit klaren Baustellen" : "Handlungsbedarf";
   }
+  const hidden = state.coachHidden || {};
+  const visible = findings.filter(x=>!hidden[x.id]);
+  const nHidden = findings.length - visible.length;
   const counts = {crit:0,warn:0,ok:0,info:0};
-  findings.forEach(x=>counts[x.level]++);
+  visible.forEach(x=>counts[x.level]++);
   document.getElementById("coachPills").innerHTML =
     (counts.crit?`<span class="pill" style="color:var(--red)">${counts.crit} kritisch</span>`:"")+
     (counts.warn?`<span class="pill" style="color:var(--yellow)">${counts.warn} Warnungen</span>`:"")+
     (counts.ok?`<span class="pill" style="color:var(--green)">${counts.ok} gut</span>`:"");
-  document.getElementById("coachFindings").innerHTML = findings.map(x=>
-    `<div class="coach-item ${x.level}">${x.saving?`<span class="save-tag">bis zu ${euro(x.saving)}/Monat</span>`:""}
-     <strong>${x.title}</strong><span class="hint">${x.text}</span></div>`).join("");
+  document.getElementById("coachFindings").innerHTML = visible.map(x=>
+    `<div class="coach-item ${x.level}">
+     <button class="del-btn" style="float:right" title="Hinweis ausblenden" onclick="hideFinding('${x.id}')">✕</button>
+     ${x.saving?`<span class="save-tag">bis zu ${euro(x.saving)}/Monat</span>`:""}
+     <strong>${x.title}</strong><span class="hint">${x.text}</span></div>`).join("")
+    + (nHidden?`<p class="hint" style="margin-top:6px">${nHidden} Hinweis(e) ausgeblendet (zählen weiter in den Score). <a href="#" style="color:var(--accent)" onclick="state.coachHidden={};save();renderAll();return false">Wieder anzeigen</a></p>`:"");
   if(chart503020) chart503020.destroy();
   if(split){
     chart503020 = new Chart(document.getElementById("chart503020"), {
@@ -1428,12 +1499,59 @@ function renderCoach(){
           {label:"Richtwert", data:[50,30,20], backgroundColor:"rgba(139,150,173,.35)", borderRadius:6}
         ]},
       options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",
-        plugins:{legend:{labels:{color:"#8b96ad"}},
+        plugins:{legend:{labels:{color:cvar("--muted")}},
           tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x.toFixed(0)} %`}}},
-        scales:{x:{max:80,ticks:{color:"#8b96ad",callback:v=>v+" %"},grid:{color:"rgba(42,53,80,.4)"}},
-                y:{ticks:{color:"#e8ecf4"},grid:{display:false}}}}
+        scales:{x:{max:80,ticks:{color:cvar("--muted"),callback:v=>v+" %"},grid:{color:cvar("--grid")}},
+                y:{ticks:{color:cvar("--text")},grid:{display:false}}}}
     });
   }
+}
+
+/* ============================================================
+   EXPORT FÜR CLAUDE (Analyse-Paket in Zwischenablage)
+   ============================================================ */
+function exportForClaude(){
+  const rec = markApproved(detectRecurring(state.transactions)).filter(r=>r.active);
+  const {score, findings, split, meta} = coachAnalysis(state.transactions, state.budgets, state.goals, cryptoValue(), rec, monthStart());
+  const months = allMonths().slice(0,6).reverse();
+  const lines = [];
+  lines.push("Du bist mein Finanzcoach. Analysiere die folgenden Kennzahlen aus meinem Finanz-Dashboard und gib mir konkrete, priorisierte Empfehlungen mit Beträgen. Sei direkt und ehrlich, keine Schmeicheleien. Frage nach, wenn dir Kontext fehlt.");
+  lines.push("");
+  lines.push("== MONATE (Einnahmen / Ausgaben / Saldo) ==");
+  for(const m of months){ const s=sums(txOfMonth(m)); lines.push(`${m}: ${s.inc.toFixed(0)} / ${s.exp.toFixed(0)} / ${s.bal.toFixed(0)} €`); }
+  lines.push("");
+  lines.push("== AUSGABEN NACH KATEGORIE (Ø/Monat, letzte 3 Monate) ==");
+  const cat={}; const l3=allMonths().slice(0,3);
+  for(const m of l3){ for(const t of txOfMonth(m)){ if(t.amount<0) cat[t.category]=(cat[t.category]||0)-t.amount/l3.length; } }
+  Object.entries(cat).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>lines.push(`${c}: ${v.toFixed(0)} €`));
+  lines.push("");
+  lines.push("== AKTIVE FIXKOSTEN ==");
+  rec.forEach(r=>lines.push(`${r.payee} (${r.category}, ${r.rhythm}): ${r.avgMonthly.toFixed(2)} €/M${r.approved?" [als notwendig markiert]":""}`));
+  if(Array.isArray(state.loans) && state.loans.length){
+    lines.push(""); lines.push("== KREDITE ==");
+    state.loans.forEach(l=>{ const rm=monthsRemaining(l.end); if(rm>0) lines.push(`${l.name}: ${l.rate.toFixed(2)} €/M bis ${l.end} (Rest ≈ ${(l.rate*rm).toFixed(0)} €)`); });
+  }
+  if(state.goals.length){ lines.push(""); lines.push("== SPARZIELE =="); state.goals.forEach(g=>lines.push(`${g.name}: ${g.saved.toFixed(0)} / ${g.target.toFixed(0)} €`)); }
+  const kv = cryptoValue();
+  if(kv>0){ lines.push(""); lines.push("== KRYPTO =="); state.crypto.forEach(c=>{ const p=(state.cryptoPrices[c.id]||{}).eur||0; lines.push(`${c.name}: ${c.amount} Stk ≈ ${(c.amount*p).toFixed(0)} € (Einstand ${c.cost?c.cost.toFixed(0)+" €":"unbekannt"})`); }); }
+  if(state.balanceAnchor){ lines.push(""); lines.push("Kontostand: "+ (state.balanceAnchor.amount + state.transactions.filter(t=>t.date>state.balanceAnchor.date).reduce((s,t)=>s+t.amount,0)).toFixed(0)+" €"); }
+  lines.push("");
+  lines.push("== DASHBOARD-COACH (regelbasiert) ==");
+  lines.push("Score: "+(score===null?"–":score+"/100"));
+  findings.forEach(f=>lines.push(`[${f.level}] ${f.title}`));
+  if(split) lines.push(`50/30/20: Grundbedarf ${split.needs.toFixed(0)}% | Wünsche ${split.wants.toFixed(0)}% | Sparen ${split.save.toFixed(0)}%`);
+  const text = lines.join("\n");
+  const done = () => toast("Analyse-Paket kopiert — jetzt in der Claude-App einfügen.");
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){
+  const ta=document.createElement("textarea");
+  ta.value=text; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){ toast("Kopieren fehlgeschlagen — Text wird als Datei geladen.");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/plain"})); a.download="finanz-analyse.txt"; a.click(); }
+  document.body.removeChild(ta);
 }
 
 /* ============================================================
@@ -1453,14 +1571,10 @@ function renderAll(){
   renderCoach();
 }
 load();
+applyTheme();
 renderAll();
 if(state.crypto.length) fetchCryptoPrices(false);
-
-// PWA: Service Worker nur im gehosteten Betrieb
-if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  navigator.serviceWorker.register("sw.js").catch(()=>{});
-}
-
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 </script>
 </body>
 </html>
